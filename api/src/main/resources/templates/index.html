@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Email Warmup Service UI</title>
+</head>
+<body>
+<h1>Email Warmup Service Test UI</h1>
+
+<div th:if="${message}">
+    <strong th:text="${message}"></strong>
+</div>
+
+<!-- Section for linking an account (storing credentials) -->
+<h2>Link Account / Add Credentials</h2>
+<form th:action="@{/link-credential}" method="post">
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" placeholder="tenant1_user1" required/><br/><br/>
+
+    <label for="tenantId">Tenant ID:</label>
+    <input type="text" id="tenantId" name="tenantId" placeholder="tenant1" required/><br/><br/>
+
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" name="userId" placeholder="user1" required/><br/><br/>
+
+    <label for="provider">Provider:</label>
+    <select id="provider" name="provider">
+        <option value="Gmail">Gmail</option>
+        <option value="Outlook">Outlook</option>
+    </select><br/><br/>
+
+    <label for="token">Token:</label>
+    <input type="text" id="token" name="token" placeholder="token" required/><br/><br/>
+
+    <button type="submit">Link Credential</button>
+    <!-- New button to populate test data -->
+    <button type="button" onclick="populateTestData()">Generate Test Data</button>
+</form>
+
+<!-- Section to view stored credentials -->
+<h3>Stored Credentials</h3>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Tenant ID</th>
+        <th>User ID</th>
+        <th>Provider</th>
+        <th>Token</th>
+    </tr>
+    <tr th:each="cred : ${credentials}">
+        <td th:text="${cred.id}">ID</td>
+        <td th:text="${cred.tenantId}">Tenant ID</td>
+        <td th:text="${cred.userId}">User ID</td>
+        <td th:text="${cred.provider}">Provider</td>
+        <td th:text="${cred.token}">Token</td>
+    </tr>
+</table>
+
+<hr/>
+
+<!-- Section for sending a test email event -->
+<h2>Send Test Email Event</h2>
+<form th:action="@{/send-email}" method="post">
+    <label for="tenantIdEvent">Tenant ID:</label>
+    <input type="text" id="tenantIdEvent" name="tenantId" placeholder="tenant1" required/><br/><br/>
+
+    <label for="userIdEvent">User ID:</label>
+    <input type="text" id="userIdEvent" name="userId" placeholder="user1" required/><br/><br/>
+
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" placeholder="Test Email" required/><br/><br/>
+
+    <label for="body">Body:</label>
+    <textarea id="body" name="body" placeholder="Hello, this is a test." required></textarea><br/><br/>
+
+    <button type="submit">Send Email Event</button>
+</form>
+
+<p>
+    <em>Note: The email address is resolved using the combination of userId and tenantId by the service logic.</em>
+</p>
+
+<!-- JavaScript to populate test data in the Link Credential form -->
+<script>
+    function populateTestData() {
+        document.getElementById("id").value = "tenant1_user3";
+        document.getElementById("tenantId").value = "tenant2";
+        document.getElementById("userId").value = "user2@tenant1.company.com";
+        document.getElementById("provider").value = "Outlook";
+        document.getElementById("token").value = "token3";
+    }
+</script>
+</body>
+</html>
